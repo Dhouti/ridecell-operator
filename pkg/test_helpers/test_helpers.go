@@ -160,7 +160,7 @@ func (helpers *PerTestHelpers) TeardownTest() {
 	deleteBackgroundPolicy := metav1.DeletionPropagation("Background")
 	err := helpers.Client.Delete(context.TODO(), &corev1.Namespace{ObjectMeta: metav1.ObjectMeta{Name: helpers.Namespace}}, client.PropagationPolicy(deleteBackgroundPolicy))
 	gomega.Expect(err).NotTo(gomega.HaveOccurred())
-	err = helpers.Client.Delete(context.TODO(), &corev1.Namespace{ObjectMeta: metav1.ObjectMeta{Name: helpers.OperatorNamespace}, client.PropagationPolicy(deleteBackgroundPolicy)})
+	err = helpers.Client.Delete(context.TODO(), &corev1.Namespace{ObjectMeta: metav1.ObjectMeta{Name: helpers.OperatorNamespace}}, client.PropagationPolicy(deleteBackgroundPolicy))
 	gomega.Expect(err).NotTo(gomega.HaveOccurred())
 }
 
