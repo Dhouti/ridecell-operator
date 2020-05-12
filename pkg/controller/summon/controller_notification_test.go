@@ -56,7 +56,7 @@ var _ = Describe("Summon controller notifications @notifications", func() {
 	}
 
 	// Helper function for slack notification test cases to retrieve only test case related slack history.
-	getTestRelevantHistory := func(slackClient *slack.Client, slackChannel string, lastTimestamp string) slack.History {
+	getTestRelevantHistory := func(testIdentity string, slackClient *slack.Client, slackChannel string, lastTimestamp string) slack.History {
 		historyParams := slack.NewHistoryParameters()
 		historyParams.Oldest = lastTimestamp
 		history, err := slackClient.GetChannelHistory(slackChannel, historyParams)
@@ -64,7 +64,7 @@ var _ = Describe("Summon controller notifications @notifications", func() {
 		filteredMsgs := []slack.Message{}
 		// Get messages pertaining only to testRunId.
 		for _, msg := range history.Messages {
-			if strings.Contains(msg.Attachments[0].Text, testRunId) {
+			if strings.Contains(msg.Attachments[0].Text, testIdentity) {
 				filteredMsgs = append(filteredMsgs, msg)
 			}
 		}
@@ -303,7 +303,7 @@ var _ = Describe("Summon controller notifications @notifications", func() {
 				}))
 
 				// Find all messages since the start of the test.
-				history := getTestRelevantHistory(slackClient, slackChannel, lastMessage.Timestamp)
+				history := getTestRelevantHistory(testIdentity, slackClient, slackChannel, lastMessage.Timestamp)
 				Expect(len(history.Messages)).To(Equal(1), describeMsgs(history.Messages))
 				Expect(history.Messages[0].Attachments).To(HaveLen(1))
 				Expect(history.Messages[0].Attachments[0].Color).To(Equal("2eb886"))
@@ -334,7 +334,7 @@ var _ = Describe("Summon controller notifications @notifications", func() {
 				c.EventuallyGet(helpers.Name(testIdentity+"-notifytest"), fetchInstance, c.EventuallyStatus(summonv1beta1.StatusReady))
 
 				// Find all messages since the start of the test.
-				history := getTestRelevantHistory(slackClient, slackChannel, lastMessage.Timestamp)
+				history := getTestRelevantHistory(testIdentity, slackClient, slackChannel, lastMessage.Timestamp)
 				Expect(len(history.Messages)).To(Equal(1), describeMsgs(history.Messages))
 			})
 
@@ -351,7 +351,7 @@ var _ = Describe("Summon controller notifications @notifications", func() {
 				c.EventuallyGet(helpers.Name(testIdentity+"-notifytest2"), fetchInstance, c.EventuallyStatus(summonv1beta1.StatusReady))
 
 				// Find all messages since the start of the test.
-				history := getTestRelevantHistory(slackClient, slackChannel, lastMessage.Timestamp)
+				history := getTestRelevantHistory(testIdentity, slackClient, slackChannel, lastMessage.Timestamp)
 				Expect(len(history.Messages)).To(Equal(2), describeMsgs(history.Messages))
 
 			})
@@ -374,7 +374,7 @@ var _ = Describe("Summon controller notifications @notifications", func() {
 				c.EventuallyGet(helpers.Name(testIdentity+"-notifytest"), fetchInstance, c.EventuallyStatus(summonv1beta1.StatusError))
 
 				// Check that exactly one message happened
-				history := getTestRelevantHistory(slackClient, slackChannel, lastMessage.Timestamp)
+				history := getTestRelevantHistory(testIdentity, slackClient, slackChannel, lastMessage.Timestamp)
 				Expect(len(history.Messages)).To(Equal(1), describeMsgs(history.Messages))
 				Expect(history.Messages[0].Attachments).To(HaveLen(1))
 				Expect(history.Messages[0].Attachments[0].Color).To(Equal("a30200"))
@@ -428,7 +428,7 @@ var _ = Describe("Summon controller notifications @notifications", func() {
 				}))
 
 				// Find all messages since the start of the test.
-				history := getTestRelevantHistory(slackClient, slackChannel, lastMessage.Timestamp)
+				history := getTestRelevantHistory(testIdentity, slackClient, slackChannel, lastMessage.Timestamp)
 				Expect(len(history.Messages)).To(Equal(2), describeMsgs(history.Messages))
 				Expect(history.Messages[0].Attachments).To(HaveLen(1))
 				Expect(history.Messages[0].Attachments[0].Color).To(Equal("2eb886"))
@@ -494,7 +494,7 @@ var _ = Describe("Summon controller notifications @notifications", func() {
 				c.EventuallyGet(helpers.Name(testIdentity+"-summon-dispatch-hwaux-test"), fetchInstance, c.EventuallyStatus(summonv1beta1.StatusReady))
 
 				// Find all messages since the start of the test.
-				history := getTestRelevantHistory(slackClient, slackChannel, lastMessage.Timestamp)
+				history := getTestRelevantHistory(testIdentity, slackClient, slackChannel, lastMessage.Timestamp)
 				Expect(len(history.Messages)).To(Equal(4), describeMsgs(history.Messages))
 				// One for platform one for dispatch, one for hwaux, and a new one for summon platform version change.
 				Expect(history.Messages[0].Attachments).To(HaveLen(1))
