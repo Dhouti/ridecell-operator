@@ -47,7 +47,7 @@ import (
 
 // NOTE: To deal with flakey Slack notification history check failures resulting from concurrent test
 // runs, use testRunId in the instance name.
-var _ = Describe("Summon controller notifications", func() {
+var _ = Describe("Summon controller notifications @notifications", func() {
 	var helpers *test_helpers.PerTestHelpers
 	var instance *summonv1beta1.SummonPlatform
 	testRunId, err := utils.RandomString(6)

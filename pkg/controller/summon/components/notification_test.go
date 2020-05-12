@@ -29,7 +29,7 @@ import (
 	. "github.com/Ridecell/ridecell-operator/pkg/test_helpers/matchers"
 )
 
-var _ = Describe("SummonPlatform Notification Component", func() {
+var _ = Describe("SummonPlatform Notification Component @notifications", func() {
 	comp := summoncomponents.NewNotification()
 	var mockedSlackClient *summoncomponents.SlackClientMock
 	var mockedDeployStatusClient *summoncomponents.DeployStatusClientMock
