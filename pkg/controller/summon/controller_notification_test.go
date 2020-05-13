@@ -62,7 +62,7 @@ var _ = Describe("Summon controller notifications @notifications", func() {
 		history, err := slackClient.GetChannelHistory(slackChannel, historyParams)
 		Expect(err).ToNot(HaveOccurred())
 		filteredMsgs := []slack.Message{}
-		// Get messages pertaining only to testRunId.
+		// Get messages pertaining only to testIdentity.
 		for _, msg := range history.Messages {
 			if strings.Contains(msg.Attachments[0].Text, testIdentity) {
 				filteredMsgs = append(filteredMsgs, msg)
