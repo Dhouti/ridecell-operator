@@ -39,6 +39,7 @@ import (
 	corev1 "k8s.io/api/core/v1"
 )
 
+// throwing in a comment here to trigger test_rds run.
 const RDSInstanceDatabaseFinalizer = "rdsinstance.database.finalizer"
 
 type rdsInstanceComponent struct {
